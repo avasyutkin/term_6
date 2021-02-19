@@ -7,26 +7,17 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.widget import Widget
-from kivy.base import EventLoop
-from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 import АТБАШ
 import Квадрат_Полибия
 import Шифр_Цезаря
 
-
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.scrollview import ScrollView
-from kivy.core.window import Window
-from kivy.app import runTouchApp
-
 Window.size = (900, 410)
 Window.clearcolor = (1, 1, 1, 0)
 cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря'}
-
-
 
 class Interface(App):
     def build(self):
@@ -85,16 +76,11 @@ class Interface(App):
         self.layout_array_cipher.spacing = 20
         self.layout_array_cipher.size_hint_x = None
 
-
         for cipher in cipher_array:
             globals()[cipher] = ToggleButton(group='group', text=cipher_array[cipher], size_hint_x=None, height=40, color=(0, 0, 0), font_size=13, width=120, background_normal='')
             self.layout_array_cipher.add_widget(globals()[cipher])
         self.scroll_cipher_array = ScrollView(size_hint=(1, None), size=(863, 30), pos=(16, 245), bar_color=(0, 0, 0, 0), bar_inactive_color=(0, 0, 0, 0))
         self.scroll_cipher_array.add_widget(self.layout_array_cipher)
-
-
-
-
 
         self.form = Widget()
         self.form.add_widget(self.label_input)
@@ -106,8 +92,6 @@ class Interface(App):
         self.form.add_widget(self.label_output)
         self.form.add_widget(self.output_message)
         self.form.add_widget(self.scroll_cipher_array)
-
-
 
         def encryption(instance):
             str = ''
@@ -121,7 +105,6 @@ class Interface(App):
                 else:
                     self.output_message.text = Шифр_Цезаря.encryption(self.input_message.text, str, self.input_key.text)
 
-
         def decryption(instance):
             str = ''
             if АТБАШ_var.state == 'down':
@@ -132,22 +115,13 @@ class Interface(App):
                 if self.input_key.text == '':
                     self.button_decryption.disabled
                 else:
-                    self.output_message.text = Шифр_Цезаря.encryption(self.input_message.text, str, self.input_key.text)
-
+                    self.output_message.text = Шифр_Цезаря.decryption(self.input_message.text, str, self.input_key.text)
 
         self.button_encryption.bind(on_press=encryption)
         self.button_decryption.bind(on_press=decryption)
         self.layout_array_cipher.bind(minimum_width=self.layout_array_cipher.setter('width'))
 
-
-
-
-
-
-
         return self.form
-
-
 
 
 if __name__ == '__main__':

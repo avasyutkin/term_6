@@ -26,12 +26,14 @@ def encryption(message, encrypted_message):
     return encrypted_message
 
 def decryption(encrypted_message, decrypted_message):
-    for symbol in encrypted_message:
-        for i in range(len(alphabet)):
-            for j in range(len(alphabet[i])):
-                if str(i+1)+str(j+1) == symbol:
-                    decrypted_message = decrypted_message + str(alphabet[i][j])
-    return decrypted_message
+    def decryption(encrypted_message, decrypted_message):
+        encrypted_message_array = encrypted_message.split()
+        for symbol in encrypted_message_array:
+            for i in range(len(alphabet)):
+                for j in range(len(alphabet[i])):
+                    if str(i + 1) + str(j + 1) == symbol:
+                        decrypted_message = decrypted_message + str(alphabet[i][j])
+        return decrypted_message
 
 
 message = input("Введите фразу: ")
