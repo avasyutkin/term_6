@@ -4,33 +4,14 @@ alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', '�
 
 def encryption(message, encrypted_message):
     for symbol in message:
-        if alphabet.index(symbol) == 31:
-            symbol = (alphabet.index(symbol) + int(key)) % 31 - 1
-        else:
-            symbol = (alphabet.index(symbol) + int(key)) % 31   # для расширенного алфавита - 76
+        symbol = 31 - alphabet.index(symbol)   # для расширенного алфавита - 76
         encrypted_message = encrypted_message + str(alphabet[symbol])
     return encrypted_message
 
 def decryption(encrypted_message, decrypted_message):
     for symbol in encrypted_message:
-        if alphabet.index(symbol) == 0:
-            symbol = (alphabet.index(symbol) - int(key)) % 31 + 1
-        else:
-            symbol = (alphabet.index(symbol) - int(key)) % 31   # для расширенного алфавита - 76
+        symbol = 31 - alphabet.index(symbol)   # для расширенного алфавита - 76
         decrypted_message = decrypted_message + str(alphabet[symbol])
     return decrypted_message
 
 
-
-message = input("Введите фразу: ")
-key = int(input("Введите ключ: "))
-
-encrypted_message = ''
-encrypted_message = encryption(message, encrypted_message)
-
-print(encrypted_message)
-
-decrypted_message = ''
-decrypted_message = decryption(encrypted_message, decrypted_message)
-
-print(decrypted_message)
