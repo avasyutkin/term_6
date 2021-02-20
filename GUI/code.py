@@ -14,10 +14,13 @@ from kivy.core.window import Window
 import АТБАШ
 import Квадрат_Полибия
 import Шифр_Цезаря
+import Шифр_Тритемия
+import Шифр_Белазо
+import Шифр_Виженера
 
 Window.size = (900, 410)
 Window.clearcolor = (1, 1, 1, 0)
-cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря'}
+cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера'}
 
 class Interface(App):
     def build(self):
@@ -104,6 +107,19 @@ class Interface(App):
                     self.button_encryption.disabled
                 else:
                     self.output_message.text = Шифр_Цезаря.encryption(self.input_message.text, str, self.input_key.text)
+            if Шифр_Тритемия_var.state == 'down':
+                self.output_message.text = Шифр_Тритемия.encryption(self.input_message.text, str)
+            if Шифр_Виженера_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_encryption.disabled
+                else:
+                    self.output_message.text = Шифр_Виженера.encryption(self.input_message.text, str, self.input_key.text)
+            if Шифр_Белазо_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_encryption.disabled
+                else:
+                    self.output_message.text = Шифр_Белазо.encryption(self.input_message.text, str, self.input_key.text)
+
 
         def decryption(instance):
             str = ''
@@ -116,6 +132,19 @@ class Interface(App):
                     self.button_decryption.disabled
                 else:
                     self.output_message.text = Шифр_Цезаря.decryption(self.input_message.text, str, self.input_key.text)
+            if Шифр_Тритемия_var.state == 'down':
+                self.output_message.text = Шифр_Тритемия.decryption(self.input_message.text, str)
+            if Шифр_Виженера_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    self.output_message.text = Шифр_Виженера.decryption(self.input_message.text, str, self.input_key.text)
+            if Шифр_Белазо_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    self.output_message.text = Шифр_Белазо.decryption(self.input_message.text, str, self.input_key.text)
+
 
         self.button_encryption.bind(on_press=encryption)
         self.button_decryption.bind(on_press=decryption)
