@@ -22,7 +22,7 @@ def encryption(message, encrypted_message):
         for i in range(len(alphabet)):
             for j in range(len(alphabet[i])):
                 if alphabet[i][j] == symbol:
-                    encrypted_message.append(str(i+1)+str(j+1))
+                    encrypted_message = encrypted_message + str(i+1)+str(j+1) + ' '
     return encrypted_message
 
 def decryption(encrypted_message, decrypted_message):
@@ -30,14 +30,14 @@ def decryption(encrypted_message, decrypted_message):
     for symbol in encrypted_message_array:
         for i in range(len(alphabet)):
             for j in range(len(alphabet[i])):
-                if str(i + 1) + str(j + 1) == symbol:
+                if str(i+1)+str(j+1) == symbol:
                     decrypted_message = decrypted_message + str(alphabet[i][j])
     return decrypted_message
 
 
 message = input("Введите фразу: ")
 
-encrypted_message = []
+encrypted_message = ''
 encrypted_message = encryption(message, encrypted_message)
 
 print(encrypted_message)

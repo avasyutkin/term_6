@@ -17,10 +17,11 @@ import Шифр_Цезаря
 import Шифр_Тритемия
 import Шифр_Белазо
 import Шифр_Виженера
+import Матричный_шифр
 
 Window.size = (900, 410)
 Window.clearcolor = (1, 1, 1, 0)
-cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера'}
+cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера', 'Матричный_шифр_var': 'Матричный шифр'}
 
 class Interface(App):
     def build(self):
@@ -119,6 +120,14 @@ class Interface(App):
                     self.button_encryption.disabled
                 else:
                     self.output_message.text = Шифр_Белазо.encryption(self.input_message.text, str, self.input_key.text)
+            if Матричный_шифр_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_encryption.disabled
+                else:
+                    if Матричный_шифр.matrix_check(Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text))) == 'Введенный ключ не подходит для шифрования, введите другой.':
+                        self.output_message.text = 'Введенный ключ не подходит для шифрования, введите другой.'
+                    else:
+                        self.output_message.text = Матричный_шифр.encryption(Матричный_шифр.message_to_vector(Матричный_шифр.message_to_index(self.input_message.text), Матричный_шифр.key_to_array(self.input_key.text)), Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text)))
 
 
         def decryption(instance):
@@ -144,8 +153,14 @@ class Interface(App):
                     self.button_decryption.disabled
                 else:
                     self.output_message.text = Шифр_Белазо.decryption(self.input_message.text, str, self.input_key.text)
-
-
+            if Матричный_шифр_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    if Матричный_шифр.matrix_check(Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text))) == 'Введенный ключ не подходит для шифрования, введите другой.':
+                        self.output_message.text = 'Введенный ключ не подходит для шифрования, введите другой.'
+                    else:
+                        self.output_message.text = Матричный_шифр.decryption(Матричный_шифр.message_to_vector(Матричный_шифр.str_to_list(self.input_message.text),  Матричный_шифр.key_to_array(self.input_key.text)), Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text)))
         self.button_encryption.bind(on_press=encryption)
         self.button_decryption.bind(on_press=decryption)
         self.layout_array_cipher.bind(minimum_width=self.layout_array_cipher.setter('width'))
