@@ -53,7 +53,6 @@ def encryption(message, key):  # шифруем наше сообщение пу
 
     return encrypted_message
 
-
 def decryption(encrypted_message, key):
     decrypted_message = ''
     key_1 = [[0]*len(key) for i in range(len(key))]
@@ -74,6 +73,7 @@ def minor_of_element(A, i, j):  # всопомогательная функци�
     sub_A = np.delete(A, i, 0)
     sub_A = np.delete(sub_A, j, 1)
     M_ij = np.linalg.det(sub_A)
+
     return np.around(M_ij, decimals=3)
 
 message = list(input('Введите сообщение: '))

@@ -2,157 +2,105 @@ from textwrap import wrap
 
 alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'э', 'ю', 'я']
 
-def encryption(message, encrypted_message, key):
-    key = key_generation(key)
+def before_processing(message, key):  # предобработка
     message = list(message)
-    message_str = ''
+    new_message = ''
     i = -1
+
     for symbol in message:
         if symbol == message[i]:
-            message_str = message_str + 'ф' + symbol
+            new_message = new_message + 'ф' + symbol  # ставим 'ф' между двумя повторяющимися буквами
         else:
-            message_str = message_str + symbol
+            new_message = new_message + symbol
         i = i + 1
-    print(len(message_str))
-    if len(message_str) % 2 != 0:
-        message_str = message_str + 'ф'
 
-    print(message_str)
+    if len(new_message) % 2 != 0:
+        new_message = new_message + 'ф'  # если число букв во фразе нечетно, в конец ставим 'ф'
 
-    message = wrap(message_str, 2)
-    print(key)
-    message_str = ''
-    for symbol in message:
+    new_message = letter_to_index(new_message, key)
+
+    return new_message
+
+def letter_to_index(message, key):
+    key = key_generation(key)
+    new_message = wrap(message, 2)  # разбиваем фразу на биграммы
+
+    message = ''
+    for symbol in new_message:
         for sym in symbol:
             for i in range(len(key)):
                 for j in range(len(key[i])):
                     if sym == key[i][j]:
-                        message_str = message_str + str(i)+str(j)
+                        message = message + str(i) + str(j)  # создаем строку из порядковых номеров в матрице-ключе букв исходной фразы
 
-    message = wrap(message_str, 4)
-    message_str = ''
-    print(message)
+    return message
+
+def index_to_letter(message, key):
+    key = key_generation(key)
+    new_message = ''
+    message = wrap(message, 2)  # разбиваем эту строку на биграммы, соответствующие позициям каждой буквы
+
     for i in message:
-        i = wrap(i, 1)
-        if i[0] == i[2]:
-            if i[1] == '5':
-                i[1] = (int(i[1]) + 1) % len(key) - 1
-                i[3] = int(i[3]) + 1
-            if i[3] == '5':
-                i[3] = (int(i[3]) + 1) % len(key) - 1
-                i[1] = int(i[1]) + 1
-            else:
-                i[1] = (int(i[1]) + 1) % len(key)
-                i[3] = (int(i[3]) + 1) % len(key)
-        elif i[1] == i[3]:
-            if i[0] == '4':
-                i[0] = (int(i[0]) + 1) % len(key) - 1
-                i[2] = int(i[2]) + 1
-            if i[2] == '4':
-                i[2] = (int(i[2]) + 1) % len(key) - 1
-                i[0] = int(i[0]) + 1
-            else:
-                i[0] = (int(i[0]) + 1) % len(key)
-                i[2] = (int(i[2]) + 1) % len(key)
-        else:
-            m = i[3]
-            i[3] = i[1]
-            i[1] = m
-        message_str = message_str + str(i[0]) + str(i[1]) + str(i[2]) + str(i[3])
-    print(len(message_str), message_str)
-    message = wrap(message_str, 2)
-    print(len(message), message)
-    count= 0
-    for i in message:
-        #print(message.index(i))
         for o in range(len(key)+1):
             for j in range(len(key)+1):
                 if i == str(o)+str(j):
-                    count = count + 1
-                    #print(count, message[message.index(i)], str(o)+str(j))
-                    encrypted_message = encrypted_message + key[o][j]
-    print(encrypted_message, 'письк')
+                    new_message = new_message + key[o][j]  # заменяем номера позиций на буквы и получаем зашифрованное/расшифрованное сообщение
+
+    return new_message
+
+
+def encryption(message, key):
+    encrypted_message = ''
+    message = wrap(message, 4)  # делим строку на строки по 4 символа (по две цифры для каждой буквы биграммы)
+
+    for i in message:  # в цикле осуществляем преобразования для шифрования
+        i = wrap(i, 1)
+        if i[0] == i[2]:  # если две буквы биграммы в одной строке, перемещаем их право на одну позицию
+            i[1] = (int(i[1]) + 1) % 6
+            i[3] = (int(i[3]) + 1) % 6
+        elif i[1] == i[3]:  # если две буквы биграммы в одном столбце, перемещаем их вниз на одну позицию
+            i[0] = (int(i[0]) + 1) % 5
+            i[2] = (int(i[2]) + 1) % 5
+
+        else:  # если буквы в одной биграмме расположены в разных строках и столбцах
+            _i = i[3]
+            i[3] = i[1]
+            i[1] = _i
+
+        encrypted_message = encrypted_message + str(i[0]) + str(i[1]) + str(i[2]) + str(i[3])  # создаем строку с позициями букв в зишифрованном сообщении
+
+    encrypted_message = index_to_letter(encrypted_message, key)
+
 
     return encrypted_message
 
-def decryption(encrypted_message, decrypted_message, key):
-    key = key_generation(key)
-    message = wrap(encrypted_message, 2)
-    print(message)
-    message_str = ''
-    for symbol in message:
-        for sym in symbol:
-            for i in range(len(key)):
-                for j in range(len(key[i])):
-                    if sym == key[i][j]:
-                        message_str = message_str + str(i) + str(j)
-    print(message_str)
+def decryption(encrypted_message, key):
+    decrypted_message = ''
+    message = letter_to_index(encrypted_message, key)
+    message = wrap(message, 4)
 
-    message = wrap(message_str, 4)
-    message_str = ''
-    print(message)
     for i in message:
         i = wrap(i, 1)
-        if i[0] == i[2]:
-            if i[1] == '0':
-                i[1] = (int(i[1]) - 1) % len(key) + 1
-                i[3] = int(i[3]) - 1
-            if i[3] == '0':
-                i[3] = (int(i[3]) - 1) % len(key) + 1
-                i[1] = int(i[1]) - 1
-            else:
-                i[1] = (int(i[1]) - 1) % len(key)
-                i[3] = (int(i[3]) - 1) % len(key)
-        elif i[1] == i[3]:
-            if i[0] == '0':
-                i[0] = (int(i[0]) - 1) % len(key) + 1
-                i[2] = int(i[2]) - 1
-            if i[2] == '0':
-                i[2] = (int(i[2]) - 1) % len(key) + 1
-                i[0] = int(i[0]) - 1
-            else:
-                i[0] = (int(i[0]) - 1) % len(key)
-                i[2] = (int(i[2]) - 1) % len(key)
-        else:
+        if i[0] == i[2]:  # если две буквы биграммы в одной строке, перемещаем их влево на одну позицию
+            i[1] = (int(i[1]) - 1) % 6
+            i[3] = (int(i[3]) - 1) % 6
+        elif i[1] == i[3]:  # если две буквы биграммы в одном столбце, перемещаем их вверх на одну позицию
+            i[0] = (int(i[0]) - 1) % 5
+            i[2] = (int(i[2]) - 1) % 5
+        else:  # если буквы в одной биграмме расположены в разных строках и столбцах
             m = i[3]
             i[3] = i[1]
             i[1] = m
-        message_str = message_str + str(i[0]) + str(i[1]) + str(i[2]) + str(i[3])
-    print(message)
-    message = wrap(message_str, 2)
-    print(message)
+        decrypted_message = decrypted_message + str(i[0]) + str(i[1]) + str(i[2]) + str(i[3])
 
-    for i in message:
-        for o in range(len(key)+1):
-            for j in range(len(key)+1):
-                if i == str(o)+str(j):
-                    decrypted_message = decrypted_message + key[o][j]
-
-    message = list(decrypted_message)
-    message_str = ''
-    i = -1
-    for symbol in message:
-        if (symbol == 'ф') and (message[i] == message[i+2]):
-            print(message[i], symbol)
-        else:
-            message_str = message_str + symbol
-        if i == len(message)-3:
-            continue
-        else:
-            i = i + 1
-
-
-
-    print(message_str)
-
-
+    decrypted_message = index_to_letter(decrypted_message, key)
 
     return decrypted_message
 
 def key_generation(key):
     key_set = set()
-    key = [x for x in list(key) + alphabet if not (x in key_set or key_set.add(x))]
-    key_matrix = [[0]*6 for i in range(5)]
+    key = [x for x in list(key) + alphabet if not (x in key_set or key_set.add(x))]  # создание массива ключ+оставишиеся буквы алфавита (без повторов)
+    key_matrix = [[0]*6 for i in range(5)]  # создние n-мерного массива для записи в него ключа
     k = 0
     for i in range(5):
         for j in range(6):
@@ -161,14 +109,12 @@ def key_generation(key):
     return key_matrix
 
 
-message = 'рневсекотумасленицазптбудетивеликиипосттчк'
-key = 'сова'
-encrypted_message = ''
-encrypted_message = encryption(message, encrypted_message, key)
+message = list(input('Введите сообщение: '))
+key = input('Введите ключ: ')
 
-print(encrypted_message)
+encrypted_message = encryption(before_processing(message, key), key)
+print('Зашифрованное сообщение: ', encrypted_message)
 
-decrypted_message = ''
-decrypted_message = decryption(encrypted_message, decrypted_message, key)
+decrypted_message = decryption(encrypted_message, key)
+print('Расшифрованное сообщение: ', decrypted_message)
 
-print(decrypted_message)
