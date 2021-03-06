@@ -19,6 +19,8 @@ def message_to_vector(message_vector):  # заполняем векторы бу
             k = k + 1
     message_vector = np.array(message_vector)
 
+    print(message_vector)
+
     return message_vector
 
 def encryption(message, key):
@@ -29,7 +31,7 @@ def encryption(message, key):
         if i == '1':
             message[:, k] = list(reversed(message[:, k]))  # по умолчанию все столбцы направлены вниз, если в ключе встречается 1, столбец переворачивается
         k = k + 1
-
+    print(message)
     message_encryption = array_in_str(message)
 
     return message_encryption

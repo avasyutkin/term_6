@@ -38,6 +38,7 @@ def key_generation(key):   # генерируем матрицу из ключа
             k = k + 1
 
     key_matrix = np.array(key_matrix)
+
     if int(np.linalg.det(key_matrix)) == 0:  # если определитель матрицы равен нулю, заверншаем работу программы
         print('Введенный ключ не подходит для шифрования, введите другой.')
         sys.exit(0)

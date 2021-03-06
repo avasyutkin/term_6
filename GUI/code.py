@@ -18,10 +18,11 @@ import Шифр_Тритемия
 import Шифр_Белазо
 import Шифр_Виженера
 import Матричный_шифр
+import Решетка_Кардано
 
 Window.size = (900, 410)
 Window.clearcolor = (1, 1, 1, 0)
-cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера', 'Матричный_шифр_var': 'Матричный шифр'}
+cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера', 'Матричный_шифр_var': 'Матричный шифр', 'Решетка_Кардано_var': 'Решетка Кардано'}
 
 class Interface(App):
     def build(self):
@@ -128,7 +129,10 @@ class Interface(App):
                         self.output_message.text = 'Введенный ключ не подходит для шифрования, введите другой.'
                     else:
                         self.output_message.text = Матричный_шифр.encryption(Матричный_шифр.message_to_vector(Матричный_шифр.message_to_index(self.input_message.text), Матричный_шифр.key_to_array(self.input_key.text)), Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text)))
-
+            if Решетка_Кардано_var.state == 'down':
+                Решетка_Кардано_сообщение_ключ = Решетка_Кардано.encryption(self.input_message.text)
+                self.output_message.text = Решетка_Кардано_сообщение_ключ[0]
+                self.input_key.text = Решетка_Кардано_сообщение_ключ[1]
 
         def decryption(instance):
             str = ''
@@ -161,6 +165,16 @@ class Interface(App):
                         self.output_message.text = 'Введенный ключ не подходит для шифрования, введите другой.'
                     else:
                         self.output_message.text = Матричный_шифр.decryption(Матричный_шифр.message_to_vector(Матричный_шифр.str_to_list(self.input_message.text),  Матричный_шифр.key_to_array(self.input_key.text)), Матричный_шифр.key_generation(Матричный_шифр.key_to_array(self.input_key.text)))
+            if Решетка_Кардано_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    self.output_message.text = Решетка_Кардано.decryption(self.input_message.text, self.input_key.text)
+
+
+
+
+
         self.button_encryption.bind(on_press=encryption)
         self.button_decryption.bind(on_press=decryption)
         self.layout_array_cipher.bind(minimum_width=self.layout_array_cipher.setter('width'))

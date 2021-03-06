@@ -1,6 +1,7 @@
 from textwrap import wrap
+import numpy as np
 
-alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'э', 'ю', 'я']
+alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ы', 'э', 'ю', 'я']
 
 def before_processing(message, key):  # предобработка
     message = list(message)
@@ -111,6 +112,8 @@ def key_generation(key):
 
 message = list(input('Введите сообщение: '))
 key = input('Введите ключ: ')
+
+print('Ваш ключ: \n', np.array(key_generation(key)))
 
 encrypted_message = encryption(before_processing(message, key), key)
 print('Зашифрованное сообщение: ', encrypted_message)
