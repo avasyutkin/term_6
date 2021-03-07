@@ -19,10 +19,14 @@ import Шифр_Белазо
 import Шифр_Виженера
 import Матричный_шифр
 import Решетка_Кардано
+import Шифр_Плэйфера
+import Вертикальная_перестановка
+import S_блок_замены
+
 
 Window.size = (900, 410)
 Window.clearcolor = (1, 1, 1, 0)
-cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера', 'Матричный_шифр_var': 'Матричный шифр', 'Решетка_Кардано_var': 'Решетка Кардано'}
+cipher_array = {'АТБАШ_var': 'АТБАШ', 'Квадрат_Полибия_var': 'Квадрат Полибия', 'Шифр_Цезаря_var': 'Шифр Цезаря', 'Шифр_Тритемия_var': 'Шифр Тритемия', 'Шифр_Белазо_var': 'Шифр Белазо', 'Шифр_Виженера_var': 'Шифр Виженера', 'S_block_var': 'S-блок замены', 'Матричный_шифр_var': 'Матричный шифр', 'Шифр_Плэйфера_var': 'Шифр Плэйфера', 'Перестановка_var': ' Перестановка', 'Решетка_Кардано_var': 'Решетка Кардано'}
 
 class Interface(App):
     def build(self):
@@ -133,6 +137,20 @@ class Interface(App):
                 Решетка_Кардано_сообщение_ключ = Решетка_Кардано.encryption(self.input_message.text)
                 self.output_message.text = Решетка_Кардано_сообщение_ключ[0]
                 self.input_key.text = Решетка_Кардано_сообщение_ключ[1]
+            if Перестановка_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_encryption.disabled
+                else:
+                    self.output_message.text = Вертикальная_перестановка.encryption(Вертикальная_перестановка.message_to_vector_enc(Вертикальная_перестановка.vector_initialization(self.input_message.text, self.input_key.text), self.input_message.text, self.input_key.text), self.input_key.text)
+            if Шифр_Плэйфера_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_encryption.disabled
+                else:
+                    self.output_message.text = Шифр_Плэйфера.encryption(Шифр_Плэйфера.before_processing(self.input_message.text, self.input_key.text), self.input_key.text)
+            if S_block_var.state == 'down':
+                self.output_message.text = S_блок_замены.encryption(self.input_message.text)
+
+
 
         def decryption(instance):
             str = ''
@@ -170,9 +188,18 @@ class Interface(App):
                     self.button_decryption.disabled
                 else:
                     self.output_message.text = Решетка_Кардано.decryption(self.input_message.text, self.input_key.text)
-
-
-
+            if Перестановка_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    self.output_message.text = Вертикальная_перестановка.decryption(Вертикальная_перестановка.message_to_vector_dec(Вертикальная_перестановка.vector_initialization(self.input_message.text, self.input_key.text), self.input_message.text, self.input_key.text), self.input_key.text)
+            if Шифр_Плэйфера_var.state == 'down':
+                if self.input_key.text == '':
+                    self.button_decryption.disabled
+                else:
+                    self.output_message.text = Шифр_Плэйфера.decryption(self.input_message.text, self.input_key.text)
+            if S_block_var.state == 'down':
+                self.output_message.text = S_блок_замены.decryption(self.input_message.text)
 
 
         self.button_encryption.bind(on_press=encryption)

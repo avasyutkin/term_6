@@ -9,7 +9,7 @@ def vector_initialization(message, key):  # подготавливаем век�
 
     return message_vector
 
-def message_to_vector_enc(message_vector, message):  # заполняем векторы буквами исходного сообщения
+def message_to_vector_enc(message_vector, message, key):  # заполняем векторы буквами исходного сообщения
     k = 0
     print(message_vector, 'мусещк')
     for i in range(len(key)):
@@ -22,7 +22,7 @@ def message_to_vector_enc(message_vector, message):  # заполняем век
     message_vector = np.array(message_vector)
     return message_vector
 
-def message_to_vector_dec(message_vector, message):  # заполняем векторы буквами зашифрованного сообщения
+def message_to_vector_dec(message_vector, message, key):  # заполняем векторы буквами зашифрованного сообщения
     k = 0
     for i in range(len(message_vector)):
         for j in range(len(key)):
@@ -76,13 +76,3 @@ def array_in_str(message_arr):  #  преобразовываем массив �
             message = message + message_arr[i][j]
 
     return message
-
-
-message = list(input('Введите сообщение: '))
-key = input('Введите ключ (0 - направление вниз, 1 - вверх): ')
-
-encrypted_message = encryption(message_to_vector_enc(vector_initialization(message, key), message), key)
-print('Зашифрованное сообщение: ', encrypted_message)
-
-decrypted_message = decryption(message_to_vector_dec(vector_initialization(encrypted_message, key), encrypted_message), key)
-print('Расшифрованное сообщение: ', decrypted_message)
