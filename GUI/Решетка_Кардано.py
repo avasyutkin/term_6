@@ -1,5 +1,8 @@
 import numpy as np
 import math
+import random
+
+alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '.', ',', '-', '!', '?', ':', ';', '—', ' ', '(', ')']
 
 def key_generation(len_message):  # генерация решетки
     key_size = int(math.sqrt(len_message)) + int((4 - int(math.sqrt(len_message)) % 4))  # исходя из длины текста вычитываем размер матрицы, в которой будет шифроваться
@@ -54,7 +57,7 @@ def encryption(message):
             if k < len(message):
                 message_vector[key[1][j][0]][key[1][j][1]] = message[k]
             else:
-                message_vector[key[1][j][0]][key[1][j][1]] = ' '
+                message_vector[key[1][j][0]][key[1][j][1]] = str(np.random.choice(alphabet, 1, True))[2:-2]
             k = k + 1
 
         message_vector = np.rot90(message_vector)  # переворачиваем матрицу
