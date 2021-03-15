@@ -1,49 +1,109 @@
-sides = [[[0, 1], [1, 0], [1, 4], [1, 6], [1, 7], [2, 1], [2, 5], [2, 9], [3, 3], [3, 7], [4, 1], [5, 2], [5, 5], [5, 6], [5, 9]],
-          [[0, 0], [0, 3], [0, 4], [0, 7], [1, 8], [2, 2], [2, 6], [3, 0], [3, 4], [3, 8], [4, 2], [4, 3], [4, 5], [4, 9], [5, 8]],
-          [[0, 2], [0, 5], [0, 6], [0, 9], [1, 1], [2, 3], [2, 7], [3, 1], [3, 5], [3, 9], [4, 0], [4, 4], [4, 6], [4, 7], [5, 1]],
-          [[0, 8], [1, 2], [1, 3], [1, 5], [1, 9], [2, 0], [2, 4], [2, 8], [3, 2], [3, 6], [4, 8], [5, 0], [5, 3], [5, 4], [5, 7]]]
-alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я']
-
 import numpy as np
+import math
 import random
 
+alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я']
 
-def encryption(message):
-    message_vector = [[' '] * 10 for i in range(6)]  # инициализируем матрицу (решетку)
-    print(np.random.choice(alphabet, 1, True), 'пизда')
-    k = 0
-    for side in sides:  # заполняем решетку по координатам
-        for i in range(len(side)):
-            if k < len(message):
-                message_vector[side[i][0]][side[i][1]] = message[k]
-            else:
-                message_vector[side[i][0]][side[i][1]] = str(np.random.choice(alphabet, 1, True))[2:-2]
-            k = k + 1
+def key_generation(len_message):  # генерация решетки
+    key_size = int(math.sqrt(len_message)) + int((4 - int(math.sqrt(len_message)) % 4))  # исходя из длины текста вычитываем размер матрицы, в которой будет шифроваться
+    message_vector = [[[' ' for i in range(int(key_size/2))] for j in range(int(key_size/2))] for k in range(4)]  # инициализируем матрицу
+
+    k = 1
+    for i in range(len(message_vector[0])):  # заполняем четыре части матрицы одинаковыми числами
+        for j in range(len(message_vector[0][i])):
+            message_vector[0][i][j] = k
+            message_vector[1][i][j] = k
+            message_vector[2][i][j] = k
+            message_vector[3][i][j] = k
+            k += 1
 
     message_vector = np.array(message_vector)
+    message_vector[1] = np.rot90(np.rot90(np.rot90(message_vector[0])))  # крутим каждую из частей таким образом, чтобы единицы были в углах
+    message_vector[2] = np.rot90(np.rot90(message_vector[1]))
+    message_vector[3] = np.rot90(message_vector[2])
+
+    matrix = []
+    for i in range(len(message_vector)):  # соединяем четыре матрицы в одну
+        for j in range(len(message_vector[0])):
+            if i < len(message_vector)-1:
+                if i % 2 == 0:
+                    matrix.append(message_vector[i][j])
+                    matrix.append(message_vector[i+1][j])
+
+    matrix = np.array(matrix)
+    matrix = matrix.reshape(key_size, key_size)
+
+    nonrepeating_array = []
+    key = []
+    while len(nonrepeating_array) != message_vector[3][0][0]:  # генерируем координаты для ключа
+        x = np.random.randint(0, len(matrix))
+        y = np.random.randint(0, len(matrix))
+        if matrix[x, y] in nonrepeating_array:
+            continue
+        else:
+            key.append([x,y])
+            nonrepeating_array.append(matrix[x, y])
+
+    print(key)
+
+    return matrix, key
+
+def encryption(message):
+    key = key_generation(len(message))  # получаем координаты
+    message_vector = [[' '] * len(key[0]) for i in range(len(key[0]))]  # инициализируем матрицу (решетку)
+    message_vector = np.array(message_vector)
+
+    k = 0
+    for i in range(4):  # заполняем решетку по координатам
+        for j in range(len(key[1])):
+            if k < len(message):
+                message_vector[key[1][j][0]][key[1][j][1]] = message[k]
+            else:
+                message_vector[key[1][j][0]][key[1][j][1]] = str(np.random.choice(alphabet, 1, True))[2:-2]
+            k = k + 1
+
+        message_vector = np.rot90(message_vector)  # переворачиваем матрицу
     print(message_vector)
+
+    key_str = ''
+
+    for i in key[1]:  # преобразовываем координаты в строку для вывода
+        for j in i:
+            key_str = key_str + str(j) + ' '
 
     message_encryption = array_in_str(message_vector)
 
-    return message_encryption
+    return message_encryption, key_str
 
-def decryption(encrypted_message):
-    message_vector = [[' '] * 10 for i in range(6)]
-    messsage_decryption = ''
+def decryption(encrypted_message, key):
+    key = key.split(' ')
+    key_array = [[' '] * 2 for i in range(int((len(key)-1)/2))]
+
     k = 0
+    for i in range(len(key_array)):  # преобразовываем строку с ключом в массив с координатами
+        for j in range(len(key_array[i])):
+            key_array[i][j] = key[k]
+            k += 1
 
+    message_vector = [[' '] * int(math.sqrt(len(encrypted_message))) for i in range(int(math.sqrt(len(encrypted_message))))]
+    message_vector = np.array(message_vector)
+    messsage_decryption = ''
+
+    k = 0
     for i in range(len(message_vector)):  # записываем сообщение в матрицу (решетку)
         for j in range(len(message_vector[i])):
             message_vector[i][j] = encrypted_message[k]
             k = k + 1
 
-    for side in sides:  # выписываем расшифрованное сообщение по координатам
-        for i in range(len(side)):
-            messsage_decryption = messsage_decryption + message_vector[side[i][0]][side[i][1]]
+    for k in range(4):  # выписываем расшифрованное сообщение по координатам
+        for i in range(len(key_array)):
+            messsage_decryption = messsage_decryption + message_vector[int(key_array[i][0])][int(key_array[i][1])]
+        message_vector = np.rot90(message_vector)  # переворачиваем решетку
 
     return messsage_decryption
 
-def array_in_str(message_arr):  #  преобразовываем массив в строку, чтобы сообщение на выходе имело презентабельный вид
+
+def array_in_str(message_arr):  # преобразовываем массив в строку, чтобы сообщение на выходе имело презентабельный вид
     message = ''
     for i in range(len(message_arr)):
         for j in range(len(message_arr[i])):
@@ -54,7 +114,7 @@ def array_in_str(message_arr):  #  преобразовываем массив �
 message = input('Введите сообщение: ')
 
 encrypted_message = encryption(message)
-print('Зашифрованное сообщение: ', encrypted_message)
+print('Зашифрованное сообщение: ', encrypted_message[0])
 
-decrypted_message = decryption(encrypted_message)
+decrypted_message = decryption(encrypted_message[0], encrypted_message[1])
 print('Расшифрованное сообщение: ', decrypted_message)

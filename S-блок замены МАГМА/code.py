@@ -26,7 +26,7 @@ def encryption(message):
         k += 1
         if k == 7:
             k = 0
-
+    print(encrypted_message)
     message = ''
     for i in encrypted_message:  # циклический сдвиг на 11 влево
         message += shift_alphabet[(shift_alphabet.index(i) - 11) % 16]
