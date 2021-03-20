@@ -13,8 +13,8 @@ def prn_generator(T0, a, c, len_message):
 
     for i in range(len_message):
         T_array.append(T)
-        T = (a * T + c) % 32
-
+        T = (a * T + c) % 33
+    print('Сгенерированная гамма: ', T_array)
     return T_array
 
 def encryption(message, gamma):
