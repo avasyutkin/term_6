@@ -129,30 +129,30 @@ def F(K):
 def encryption(a, K):
     K = str_to_hex(K)[:128]
     K = F(K)
-    a = message_completion(a)
-    a_=''
-    for p in range(len(a)):
-        for i in range(len(K)-1):
-            a[p] = L(S(X(K[i], a[p])))
 
-        a[p] = X(K[9], a[p])
-        a_ += a[p]
+    a_=''
+
+    for i in range(len(K)-1):
+        a = L(S(X(K[i], a)))
+        print(a)
+
+    a = X(K[9], a)
+    a_ += a
 
     return a_
 
 def decryption(a, K):
     K = str_to_hex(K)[:128]
     K = F(K)
-    a = wrap(a, 32)
     a_=''
 
-    for p in range(len(a)):
-        for i in range(len(K)-1, 0, -1):
-            a[p] = inv_S(inv_L(X(K[i], a[p])))
 
-        a[p] = X(K[0], a[p])
-        a_ += a[p]
-    a_ = hex_to_str(a_)
+    for i in range(len(K)-1, 0, -1):
+        a = inv_S(inv_L(X(K[i], a)))
+
+    a = X(K[0], a)
+    a_ += a
+
     return a_
 
 def array_to_str(array):
@@ -195,12 +195,7 @@ def hex_to_str(a):
 
 message = input('Введите сообщение: ')
 
-key = input('Введите ключ (минимум 8 символов): ')
-if len(key) < 9:
-    print('Введите новый ключ.')
-    sys.exit(0)
-#message = 'невсекотумасленицазптбудетивеликийпосттчк'
-#key = 'совасовасова'
+key = input('Введите ключ (минимум 9 символов): ')
 
 enc = encryption(message, key)
 print('Зашифрованное сообщение:', enc)

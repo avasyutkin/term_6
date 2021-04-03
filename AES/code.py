@@ -290,7 +290,7 @@ def encryption(input, key):
                 input = array_to_str8(input)
 
         input_ = AddRoundKey(input, w_)
-
+        print(input_)
     input_ = array_to_str(input_)
 
     return input_
