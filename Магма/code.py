@@ -1,4 +1,5 @@
 from textwrap import wrap
+import sys
 
 π = [['c', '4', '6', '2', 'a', '5', 'b', '9', 'e', '8', 'd', '7', '0', '3', 'f', '1'],
      ['6', '8', '2', '3', '9', 'a', '5', 'c', '1', 'e', '4', '7', 'b', 'd', '0', 'f'],
@@ -27,6 +28,7 @@ def g(k, a):
 
 
 def key_generation(K):
+    K = str_to_hex(K)
     K_ = generation_array(8,32)
     p = 0
     for i in range(len(K_)):
@@ -42,57 +44,37 @@ def key_generation(K):
 
 
 def encryption(a, K):
-    K = str_to_hex(K)[:64]
-    K = key_generation(K)
     a = message_completion(a)
     print(a)
-
+    K = key_generation(K)
     new_a = ''
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            new_a += a[i][j]
-
-    a = wrap(new_a, 8)
-    for p in range(0, len(a), 2):
+    for j in range(0, len(a), 2):
         for i in range(31):
-            a_ = a[p+1]
-            a[p+1] = hex(int(a[p], 16) ^ int(g(K[i], a[p+1]), 16))[2:]
-            a[p] = a_
-            #print(a)
-    print(a)
-    a_=''
-    for i in range(0, len(a), 2):
-        a_ += hex(int(a[i], 16) ^ int(g(K[31], a[i+1]),16))[2:] + a[i+1]
+            a_ = a[j+1]
+            a[j+1] = hex(int(a[j], 16) ^ int(g(K[i], a[j+1]), 16))[2:]
+            a[j] = a_
 
-    print(len(a_))
-    return a_
-    #return hex(int(a[0], 16) ^ int(g(K[31], a[1]), 16))[2:] + a[1]
+    for i in range(0, len(a), 2):
+        new_a += '0' * (8 - len(hex(int(a[i], 16) ^ int(g(K[31], a[i+1]), 16))[2:])) + hex(int(a[i], 16) ^ int(g(K[31], a[i+1]), 16))[2:] + '0' * (8 - len(a[i+1])) + a[i+1]
+
+    return new_a
 
 
 def decryption(a, K):
-    K = str_to_hex(K)[:64]
+    a = wrap(a, 8)
     K = key_generation(K)
-    print('Зашифрованное сообщение:', a, 'gfgd')
     new_a = ''
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            new_a += a[i][j]
-
-    a = wrap(new_a, 8)
-    for p in range(0, len(a), 2):
+    for j in range(0, len(a), 2):
         for i in range(31, 0, -1):
-            print(a[p], a[p + 1])
-            a_ = a[p+1]
-            a[p+1] = hex(int(a[p], 16) ^ int(g(K[i], a[p+1]), 16))[2:]
-            a[p] = a_
-            print(a[p], a[p+1])
-    a_ = ''
-    for i in range(0, len(a), 2):
-        a_+=hex(int(a[i], 16) ^ int(g(K[0], a[i+1]),16))[2:] + a[i+1]
+            a_ = a[j+1]
+            a[j+1] = hex(int(a[j], 16) ^ int(g(K[i], a[j+1]), 16))[2:]
+            a[j] = a_
 
-    print(a)
-    a_ = hex_to_str(a_)
-    return a_
+    for i in range(0, len(a), 2):
+        new_a += '0' * (8 - len(hex(int(a[i], 16) ^ int(g(K[0], a[i+1]), 16))[2:])) + hex(int(a[i], 16) ^ int(g(K[0], a[i+1]), 16))[2:] + '0' * (8 - len(a[i+1])) + a[i+1]
+
+    new_a = hex_to_str(new_a)
+    return new_a
 
 
 def generation_array(size1, size2):
@@ -127,38 +109,32 @@ def str_to_hex(a):
 
 def message_completion(a):
     a = str_to_hex(a)
-    a = wrap(a, 32)
-
-    if len(a[len(a)-1]) < 32:
-        a[len(a)-1] += '1' + '0' * (31 - len(a[len(a)-1]))
-
+    a = wrap(a, 16)
+    if len(a[len(a)-1]) < 16:
+        a[len(a)-1] += '1' + '0' * (15 - len(a[len(a)-1]))
+    a = array_to_str8(a)
     return a
 
 
 def hex_to_str(a):
     a_=''
-    a = a.rstrip('0')
-    a = a[:len(a)-1]
-    a = wrap(a,4)
-
+    a = wrap(a, 4)
     for i in range(len(a)):
-        a_ += chr(int(a[i], 16))
+        if chr(int(a[i], 16)) != 'က':
+            a_ += chr(int(a[i], 16))
 
     return a_
 
 
-#K = 'ffeeddccbbaa99887766554433221100f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff'
-#a = ['fedcba98', '76543210']
-
 a = input('Введите сообщение: ')
-K = input('Введите ключ (минимум 9 символов): ')
-a = 'невсекотумасленицазптбудетивеликийпосттчк'
-K = 'ffeeddccbbaa99887766554433221100f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff'
+K = input('Введите ключ (минимум 16 символов): ')
 
-#a = wrap(a, 8)
-enc = encryption(a, K)
-print('Зашифрованное сообщение:', enc)
-print(len(enc))
-#enc = wrap(enc, 8)
-dec = decryption(enc, K)
-print('Расшифрованное сообщение:', dec)
+if len(K) < 16:
+    print('Введите новый ключ.')
+    sys.exit(0)
+
+encrypted_message = encryption(a, K)
+print('Зашифрованное соообщение: ', encrypted_message)
+
+decrypted_message = decryption(encrypted_message, K)
+print('Расшифрованное сообщение: ', decrypted_message)

@@ -1,4 +1,5 @@
 from textwrap import wrap
+import sys
 
 Sbox = [['63', '7c', '77', '7b', 'f2', '6b', '6f', 'c5', '30', '01', '67', '2b', 'fe', 'd7', 'ab', '76'],
         ['ca', '82', 'c9', '7d', 'fa', '59', '47', 'f0', 'ad', 'd4', 'a2', 'af', '9c', 'a4', '72', 'c0'],
@@ -104,6 +105,7 @@ multiply_by_14 = [['00','0e','1c','12','38','36','24','2a','70','7e','6c','62','
                   ['37','39','2b','25','0f','01','13','1d','47','49','5b','55','7f','71','63','6d'],
                   ['d7','d9','cb','c5','ef','e1','f3','fd','a7','a9','bb','b5','9f','91','83','8d']]
 
+vector_Mix_Col = [[2, 3, 1, 1], [1, 2, 3, 1], [1, 1, 2, 3], [3, 1, 1, 2]]
 
 def RotWord(wi):
     wi = wi[2:] + wi[:2]
@@ -220,7 +222,6 @@ def InvMixColumns(input):
 
     input_ = str_to_array(input_)
 
-
     return input_
 
 def generation_array(size1, size2):
@@ -270,58 +271,109 @@ def array_to_str(array):
 
 
 def encryption(input, key):
-    input = wrap(input, 8)
-    w = wrap(key, 8)
+    input = message_completion(input)
+    w = str_to_hex(key)[:32]
+    w = array_to_str8(w)
+
     input_ = generation_array(4, 4)
     j = 0
-    w_ = w
+    input_new = ''
 
-    for i in range(11):
-        if i > 0:
-            input = SubBytes(input_, True)
-            input = ShiftRows(input)
-            w = round_key_generation(w)
-            w_ = w[4 * i:]
+    for i in range(10):
+        w = round_key_generation(w)
 
-            if j < 9:
-                input = MixColumns(input)
-                j += 1
-            else:
-                input = array_to_str8(input)
+    for l in range(0, len(input), 4):
+        for i in range(11):
+            if i > 0:
+                input[l:l+4] = SubBytes(input_, True)
+                input[l:l+4] = ShiftRows(input[l:l+4])
 
-        input_ = AddRoundKey(input, w_)
-        print(input_)
-    input_ = array_to_str(input_)
+                if j < 9:
+                    input[l:l+4] = MixColumns(input[l:l+4])
+                    j += 1
+                else:
+                    input[l:l+4] = array_to_str8(input[l:l+4])
 
-    return input_
+            input_ = AddRoundKey(input[l:l+4], w[4 * i:])
+
+        input_new += array_to_str(input_)
+        j = 0
+        input_ = generation_array(4, 4)
+
+    return input_new
 
 
 def decryption(input, key):
     input = wrap(input, 8)
-    w = wrap(key, 8)
+    w = str_to_hex(key)[:32]
+    w = array_to_str8(w)
+    input_new = ''
 
     for i in range(10):  # генерация всего ключа
-        w = round_key_generation(w)
+         w = round_key_generation(w)
 
-    for i in range(11):
+    for l in range(0, len(input), 4):
+        for i in range(11):
+            input[l:l+4] = AddRoundKey(input[l:l+4], w[44 - 4 * (i + 1):44 - 4 * i])
+            if i < 10:
+                if i > 0:
+                    input[l:l+4] = InvMixColumns(input[l:l+4])
 
-        input = AddRoundKey(input, w[44 - 4 * (i + 1):44 - 4 * i])
-        if i < 10:
-            if i > 0:
-                input = InvMixColumns(input)
+                input[l:l+4] = InvShiftRows(input[l:l+4])
+                input[l:l+4] = SubBytes(input[l:l+4], False)
+                input = array_to_str(input)
+                input = wrap(input, 8)
 
-            input = InvShiftRows(input)
-            input = SubBytes(input, False)
-            input = array_to_str(input)
-            input = wrap(input, 8)
+        input_new += array_to_str(input[l:l+4])
+    input_new = hex_to_str(input_new)
+    return input_new
 
-    input = array_to_str(input)
-    return input
 
-input = '3243f6a8885a308d313198a2e0370734'
-key = '2b7e151628aed2a6abf7158809cf4f3c'
+def array_to_str(array):
+    str = ''
+    for i in range(len(array)):
+        for j in range(len(array[i])):
+            str += array[i][j]
 
-encrypted_message = encryption(input, key)
+    return str
+
+
+def str_to_hex(a):
+    a_ = ''
+    for i in a:
+        a_ += '0' * (4 - len(hex(ord(i))[2:])) + hex(ord(i))[2:]
+
+    return a_
+
+
+def message_completion(a):
+    a = str_to_hex(a)
+    a = wrap(a, 32)
+    if len(a[len(a)-1]) < 32:
+        a[len(a)-1] += '1' + '0' * (31 - len(a[len(a)-1]))
+    a = array_to_str8(a)
+    return a
+
+
+def hex_to_str(a):
+    a_=''
+    a = wrap(a, 4)
+    for i in range(len(a)):
+        if chr(int(a[i], 16)) != 'က':
+            a_ += chr(int(a[i], 16))
+
+    return a_
+
+
+
+inp = input('Введите сообщение: ')
+key = input('Введите ключ (минимум 8 символов): ')
+
+if len(key) < 8:
+    print('Введите новый ключ.')
+    sys.exit(0)
+
+encrypted_message = encryption(inp, key)
 print('Зашифрованное сообщение:', encrypted_message)
 
 decrypted_message = decryption(encrypted_message, key)

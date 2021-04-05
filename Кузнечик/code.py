@@ -130,11 +130,10 @@ def encryption(a, K):
     K = str_to_hex(K)[:128]
     K = F(K)
     a = message_completion(a)
-    a_=''
+    a_ = ''
     for p in range(len(a)):
         for i in range(len(K)-1):
             a[p] = L(S(X(K[i], a[p])))
-
         a[p] = X(K[9], a[p])
         a_ += a[p]
 
@@ -184,19 +183,18 @@ def message_completion(a):
 
 def hex_to_str(a):
     a_=''
-    a = a.rstrip('0')
-    a = a[:len(a)-1]
-    a = wrap(a,4)
-
+    a = wrap(a, 4)
     for i in range(len(a)):
-        a_ += chr(int(a[i], 16))
+        if chr(int(a[i], 16)) != 'က':
+            a_ += chr(int(a[i], 16))
 
     return a_
+
 
 message = input('Введите сообщение: ')
 
 key = input('Введите ключ (минимум 8 символов): ')
-if len(key) < 9:
+if len(key) < 8:
     print('Введите новый ключ.')
     sys.exit(0)
 #message = 'невсекотумасленицазптбудетивеликийпосттчк'
@@ -207,9 +205,5 @@ print('Зашифрованное сообщение:', enc)
 
 dec = decryption(enc, key)
 print('Расшифрованное сообщение:', dec)
-
-message = 'невсекотумасленицазптбудетивеликийпосттчк'
-key = '8899aabbccddeeff0011223344556677fedcba98765432100123456789abcdef'
-
 
 
