@@ -188,6 +188,7 @@ def InvShiftRows(input):
 def MixColumns(input):
     a = generation_array(1, 4)
     b = generation_array(1, 4)
+    print(input)
     input_ = ''
     for i in input:
         r = i
@@ -363,7 +364,6 @@ def hex_to_str(a):
             a_ += chr(int(a[i], 16))
 
     return a_
-
 
 
 inp = input('Введите сообщение: ')

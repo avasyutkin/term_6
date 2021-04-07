@@ -15,7 +15,7 @@ def k_generation(φ, len_message):
 
     while len(k_array) != len_message:
         a = random.randint(2, φ)
-        while math.gcd(a, φ) != 1:
+        while math.gcd(a, φ) != 1:   # проверка рандомизатора на взаимную простоту с функцией Эйлера от модуля
             a = random.randint(2, φ)
         k_array.append(a)
 

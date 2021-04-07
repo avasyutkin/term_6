@@ -14,15 +14,6 @@ def mutually_prime_number(a):   # ищем взаимно-простое чис�
     return b
 
 
-def euler_function(a):
-    p = 0
-    for i in range(a):
-        if math.gcd(a, i) == 1:
-            p += 1
-
-    return p
-
-
 def solve_comparison(a, m):  # решаем сравнение
 
     return (a ** (totient(m) - 1)) % m
@@ -31,7 +22,7 @@ def solve_comparison(a, m):  # решаем сравнение
 def key_generation(P, Q):
     N = int(P) * int(Q)
     φ = totient(N)
-    E = mutually_prime_number(φ)
+    E = mutually_prime_number(φ)  # генерируем Е, являеющееся взаимно-простым с функцией Эйлера от модуля N
     D = solve_comparison(E, φ)
 
     return D, E, N
