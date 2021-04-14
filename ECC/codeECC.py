@@ -56,13 +56,13 @@ def key_gen(P, k, a, p):
         P_ = doubling_P(P_, a, p)
         if i == '1':
             P_ = addition_P(P, P_, p)
-
     return P_
 
 
-def encryption(message, P, Cb):
+def encryption(message, Cb):
     message = message_to_pos_unicode(message)
     new_message = []
+    P = generation_P()
 
     for i in range(len(message)):
         k = generation_k()
@@ -91,13 +91,14 @@ def decryption(message, Cb):
 
 def generation_k():
 
-    return random.randint(2, p)
+    return random.randint(2, p)  # !!! должно быть до q - порядок точки G
 
 
 def generation_P():
-    x = random.randint(2, p)
+    x = random.randint(-p, p)
+    y = random.choice([(x ** 3 + a * x + b) % p, (x ** 3 + a * x + b) % p])
 
-    return x, (x ** 3 + a * x + b) % p
+    return x, y
 
 
 def message_to_pos_unicode(message):
@@ -117,7 +118,7 @@ def pos_unicode_to_message(message):
     return new_message
 
 
-def curve_check(a, x_y, p):
+"""def curve_check(a, x_y, p):
     if a < p:
         b = ((x_y[1] ** 2) - ((x_y[0] ** 3) + (a * x_y[0]))) % p
 
@@ -132,37 +133,17 @@ def curve_check(a, x_y, p):
     else:
         print('Ввденный параметр а больше модуля p. Введите другие параметры, или вы можете воспользоваться кривой, предоставленной по умолчанию.')
         sys.exit(0)
-
-
-
+"""
 
 a = 1282
 b = 26572
 p = 65537
 
 message = input('Введите сообщение: ')
-choice = input('Хотите ввести параметры кривой? Если нет, вы сможете воспользоваться встроенной. (Да / Нет) ')
-if choice == 'Нет':
-    print('Кривая: y^2 = x^3 +', a, '* x +', b, 'mod', p)
-    key = int(input('Введите закрытый ключ (число не больше 65537):  '))
-    x_y = generation_P()
-    if key > 65537:
-        print('Введите новый ключ, меньший 65537.')
-        sys.exit(0)
+key = int(input('Введите закрытый ключ (число не больше 65537):  '))
 
-elif choice == 'Да':
-    a = int(input('Введите а: '))
-    p = int(input('Введите p: '))
-    x_y = generation_P()
-    b = curve_check(a, x_y, p)
-    print('Кривая: y^2 = x^3 +', a, '* x +', b, 'mod', p)
-    key = int(input('Введите закрытый ключ (число не больше 65537):  '))
-else:
-    print('Перезапустите программу и выберите Да / Нет.')
-    sys.exit(0)
-
-enc = encryption(message, x_y, key)
-print('Закрытый ключ и зашифрованное сообщение:', enc)
+enc = encryption(message, key)
+print('Зашифрованное сообщение:', enc)
 
 dec = decryption(enc, key)
 print('Расшифрованное сообщение:', dec)

@@ -5,7 +5,6 @@ import sys
 from sympy.ntheory import totient
 
 
-
 def mutually_prime_number(a):   # ищем взаимно-простое число
     b = random.randint(2, 1000000)
     while math.gcd(a, b) != 1:
