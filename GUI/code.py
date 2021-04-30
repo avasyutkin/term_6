@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
 import kivy
@@ -32,6 +33,7 @@ class Interface(App):
     def build(self):
         self.label_input = Label()
         self.label_input.text = 'Введите сообщение'
+        self.label_input.font_name = 'Arial'
         self.label_input.font_size = 13
         self.label_input.pos = (19, 390)
         self.label_input.size = (120, 14)
@@ -40,6 +42,7 @@ class Interface(App):
         self.input_message = TextInput()
         self.input_message.pos = (17, 285)
         self.input_message.size = (660, 100)
+        self.input_message.font_name = 'Arial'
         self.input_message.background_color = (.196, .196, .196, .1)
 
         self.button_encryption = Button()
@@ -47,6 +50,7 @@ class Interface(App):
         self.button_encryption.pos = (700, 344)
         self.button_encryption.background_color = (.196, .196, .196, .2)
         self.button_encryption.text = 'Зашифровать'
+        self.button_encryption.font_name = 'Arial'
         self.button_encryption.color = (255, 255, 255)
 
         self.button_decryption = Button()
@@ -54,10 +58,12 @@ class Interface(App):
         self.button_decryption.pos = (700, 285)
         self.button_decryption.background_color = (.196, .196, .196, .1)
         self.button_decryption.text = 'Расшифровать'
+        self.button_decryption.font_name = 'Arial'
         self.button_decryption.color = (255, 255, 255)
 
         self.label_input_key = Label()
         self.label_input_key.text = 'Введите ключи через пробел'
+        self.label_input_key.font_name = 'Arial'
         self.label_input_key.font_size = 13
         self.label_input_key.pos = (47, 211)
         self.label_input_key.size = (120, 14)
@@ -67,9 +73,19 @@ class Interface(App):
         self.input_key.pos = (17, 175)
         self.input_key.size = (660, 30)
         self.input_key.background_color = (.196, .196, .196, .1)
+        self.input_key.font_name = 'Arial'
+
+        self.key_warning = Label()
+        self.key_warning.text = 'В случае несоответствия ключа параметрам ключ может быть изменён'
+        self.key_warning.font_name = 'ariali'
+        self.key_warning.pos = (142, 163)
+        self.key_warning.color = (.196, .196, .196, .2)
+        self.key_warning.font_size = 10
+        self.key_warning.size = (120, 14)
 
         self.label_output = Label()
         self.label_output.text = 'Результат преобразования'
+        self.label_output.font_name = 'Arial'
         self.label_output.font_size = 13
         self.label_output.pos = (40, 125)
         self.label_output.size = (120, 14)
@@ -78,9 +94,11 @@ class Interface(App):
         self.output_message = TextInput()
         self.output_message.pos = (17, 20)
         self.output_message.size = (860, 100)
+        self.output_message.font_name = 'Arial'
         self.output_message.background_color = (.196, .196, .196, .1)
 
         self.layout_array_cipher = GridLayout()
+        self.layout_array_cipher.font_name = 'Arial'
         self.layout_array_cipher.cols = len(cipher_array)
         self.layout_array_cipher.spacing = 20
         self.layout_array_cipher.size_hint_x = None
@@ -98,6 +116,7 @@ class Interface(App):
         self.form.add_widget(self.button_decryption)
         self.form.add_widget(self.label_input_key)
         self.form.add_widget(self.input_key)
+        self.form.add_widget(self.key_warning)
         self.form.add_widget(self.label_output)
         self.form.add_widget(self.output_message)
         self.form.add_widget(self.scroll_cipher_array)
@@ -107,24 +126,30 @@ class Interface(App):
             if АТБАШ_var.state == 'down':
                 self.output_message.text = АТБАШ.encryption(self.input_message.text, str)
             if Квадрат_Полибия_var.state == 'down':
-                self.output_message.text = Квадрат_Полибия.encryption(self.input_message.text, str)
+                self.output_message.text = Квадрат_Полибия.encryption(self.input_message.text)
             if Шифр_Цезаря_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_encryption.disabled
                 else:
-                    self.output_message.text = Шифр_Цезаря.encryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Цезаря.validate(self.input_message.text, self.input_key.text, True)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Шифр_Тритемия_var.state == 'down':
-                self.output_message.text = Шифр_Тритемия.encryption(self.input_message.text, str)
+                self.output_message.text = Шифр_Тритемия.encryption(self.input_message.text)
             if Шифр_Виженера_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_encryption.disabled
                 else:
-                    self.output_message.text = Шифр_Виженера.encryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Виженера.validate(self.input_message.text, self.input_key.text, True)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Шифр_Белазо_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_encryption.disabled
                 else:
-                    self.output_message.text = Шифр_Белазо.encryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Белазо.validate(self.input_message.text, self.input_key.text, True)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Матричный_шифр_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_encryption.disabled
@@ -157,24 +182,30 @@ class Interface(App):
             if АТБАШ_var.state == 'down':
                 self.output_message.text = АТБАШ.decryption(self.input_message.text, str)
             if Квадрат_Полибия_var.state == 'down':
-                self.output_message.text = Квадрат_Полибия.decryption(self.input_message.text, str)
+                self.output_message.text = Квадрат_Полибия.decryption(self.input_message.text)
             if Шифр_Цезаря_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_decryption.disabled
                 else:
-                    self.output_message.text = Шифр_Цезаря.decryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Цезаря.validate(self.input_message.text, self.input_key.text, False)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Шифр_Тритемия_var.state == 'down':
-                self.output_message.text = Шифр_Тритемия.decryption(self.input_message.text, str)
+                self.output_message.text = Шифр_Тритемия.decryption(self.input_message.text)
             if Шифр_Виженера_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_decryption.disabled
                 else:
-                    self.output_message.text = Шифр_Виженера.decryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Виженера.validate(self.input_message.text, self.input_key.text, False)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Шифр_Белазо_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_decryption.disabled
                 else:
-                    self.output_message.text = Шифр_Белазо.decryption(self.input_message.text, str, self.input_key.text)
+                    calculation = Шифр_Белазо.validate(self.input_message.text, self.input_key.text, False)
+                    self.output_message.text = calculation[0]
+                    self.input_key.text = calculation[1]
             if Матричный_шифр_var.state == 'down':
                 if self.input_key.text == '':
                     self.button_decryption.disabled
@@ -202,9 +233,43 @@ class Interface(App):
                 self.output_message.text = S_блок_замены.decryption(self.input_message.text)
 
 
+        def choice_АТБАШ(instance):
+            self.input_key.hint_text = 'Бесключевой криптографический алгоритм'
+
+        def choice_Квадрат_Полибия(instance):
+            self.input_key.hint_text = 'Бесключевой криптографический алгоритм'
+
+        def choice_Шифр_Цезаря(instance):
+            self.input_key.hint_text = 'Введите целое число от -1114 до 1114'
+
+        def choice_Шифр_Тритемия(instance):
+            self.input_key.hint_text = 'Бесключевой криптографический алгоритм'
+
+        def choice_Шифр_Белазо(instance):
+            self.input_key.hint_text = 'Введите любую последовательность символов'
+
+        def choice_Шифр_Виженера(instance):
+            self.input_key.hint_text = 'Введите любой символ'
+
+        def choice_S_block(instance):
+            self.input_key.hint_text = 'Бесключевой криптографический алгоритм'
+
+
+
+        АТБАШ_var.bind(on_press=choice_АТБАШ)
+        Квадрат_Полибия_var.bind(on_press=choice_Квадрат_Полибия)
+        Шифр_Цезаря_var.bind(on_press=choice_Шифр_Цезаря)
+        Шифр_Тритемия_var.bind(on_press=choice_Шифр_Тритемия)
+        Шифр_Белазо_var.bind(on_press=choice_Шифр_Белазо)
+        Шифр_Виженера_var.bind(on_press=choice_Шифр_Виженера)
+        S_block_var.bind(on_press=choice_S_block)
+
+
+
         self.button_encryption.bind(on_press=encryption)
         self.button_decryption.bind(on_press=decryption)
         self.layout_array_cipher.bind(minimum_width=self.layout_array_cipher.setter('width'))
+
 
         return self.form
 
