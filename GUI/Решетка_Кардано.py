@@ -73,6 +73,11 @@ def encryption(message):
     return message_encryption, key_str
 
 def decryption(encrypted_message, key):
+    key_ = list(key.split())
+    for i in key_:
+        if not i.isnumeric():
+            return 'Введите последовательность чисел через пробел'
+
     key = key.split(' ')
     key_array = [[' '] * 2 for i in range(int((len(key)-1)/2))]
 

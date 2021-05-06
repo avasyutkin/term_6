@@ -30,6 +30,7 @@ def message_to_vector(message, key):  # разделяем массив с по�
 
 def key_generation(key):   # генерируем матрицу из ключа, который ввел пользователь
     key_matrix = [[0] * key[0] for i in range(key[0])]
+    print(key)
 
     k = 1
     for i in range(key[0]):
@@ -55,6 +56,7 @@ def encryption(message, key):  # шифруем наше сообщение пу
     return encrypted_message
 
 def decryption(encrypted_message, key):
+    print('pizda', encrypted_message)
     decrypted_message = ''
     key_1 = [[0]*len(key) for i in range(len(key))]
     a = np.linalg.det(key)  # считаем определитель
