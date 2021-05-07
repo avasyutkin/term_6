@@ -1,4 +1,5 @@
 from textwrap import wrap
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
 
 Sbox = [['63', '7c', '77', '7b', 'f2', '6b', '6f', 'c5', '30', '01', '67', '2b', 'fe', 'd7', 'ab', '76'],
@@ -345,6 +346,10 @@ def encryption(input, key):
 def decryption(input, key):
     if len(key) < 8:
         return 'Введите ключ длиной 8 символов.', key
+
+    for i in input:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.', key
 
     key = key[:8]
     input = wrap(input, 8)

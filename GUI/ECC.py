@@ -1,7 +1,9 @@
 import math
-import sys
 import random
 from sympy.ntheory import totient
+
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ']
+
 
 def euler_function(a):
     p = 0
@@ -87,6 +89,10 @@ def decryption(message, Cb):
     Cb = int(Cb)
     if Cb > 65537:
         return 'Секретный ключ не должен превышать 65537.'
+
+    for i in message:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.'
 
     message = message.split()
     new_message = []

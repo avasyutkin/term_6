@@ -1,7 +1,6 @@
 import numpy as np
 
 def vector_initialization(message, key):  # подготавливаем векторы для заполнения
-    print(message, 'message')
     if int(len(message) % len(key)) > 0:
         message_vector = [[0] * len(key) for i in range(int(len(message) / len(key)) + 1)]  # если длина сообщения не кратна размеру ключа, создаем дополнительный вектор, пустые значения в котором заполним пробелами
     else:
@@ -11,7 +10,7 @@ def vector_initialization(message, key):  # подготавливаем век�
 
 def message_to_vector_enc(message_vector, message, key):  # заполняем векторы буквами исходного сообщения
     k = 0
-    print(message_vector, 'мусещк')
+
     for i in range(len(key)):
         for j in range(len(message_vector)):
             if k < len(message):

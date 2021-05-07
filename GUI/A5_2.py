@@ -1,5 +1,7 @@
 from textwrap import wrap
 
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+
 
 def key_generation(key):
     key_bin = ''
@@ -47,6 +49,10 @@ def hex_to_bin(message_hex):
 def bin_to_message(bin_message, key):
     if len(key) < 6:
         return 'Введите ключ длиной 6 символов.', key
+
+    for i in bin_message:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.', key
 
     key = key[:6]
     bin_message = bin_array_to_str(gamma_generation(hex_to_bin(bin_message), key_generation(key)))

@@ -1,8 +1,9 @@
 import math
 import random
 from textwrap import wrap
-import sys
 from sympy.ntheory import totient
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
 
 
 def mutually_prime_number(a):   # ищем взаимно-простое число
@@ -73,6 +74,10 @@ def decryption(message, D_N):
 
     D = int(D_N[0])
     N = int(D_N[1])
+
+    for i in message:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.'
 
     message = wrap(message, len(str(N)))
     new_message = []

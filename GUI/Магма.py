@@ -1,4 +1,5 @@
 from textwrap import wrap
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
 
 π = [['c', '4', '6', '2', 'a', '5', 'b', '9', 'e', '8', 'd', '7', '0', '3', 'f', '1'],
@@ -68,6 +69,9 @@ def decryption(a, K):
         return 'Введите ключ длиной 16 символов.', K
 
     K_ = K[:16]
+    for i in a:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.', K_
     a = wrap(a, 8)
     K = key_generation(K_)
     new_a = ''

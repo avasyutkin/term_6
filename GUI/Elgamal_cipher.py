@@ -3,6 +3,7 @@ import random
 from textwrap import wrap
 import sys
 from sympy.ntheory import totient
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 
 def solve_comparison(g, x, p):  # решаем сравнение
@@ -56,7 +57,7 @@ def encryption(message, P_G_X):
         b = '0' * (len(str(p)) - len(str((int(message[i]) * y ** k[i]) % p))) + str((int(message[i]) * y ** k[i]) % p)
         new_message += a + b
 
-    return 'Зашифрованное сообщение: ' + new_message + '\nПараметры D и N: ' + str(x) + ' ' + str(p)
+    return 'Зашифрованное сообщение: ' + new_message + '\nПараметры X и P: ' + str(x) + ' ' + str(p)
 
 
 def decryption(message, x_p):
@@ -72,6 +73,9 @@ def decryption(message, x_p):
 
     x, p = int(x_p[0]), int(x_p[1])
 
+    for i in message:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.'
 
     message = wrap(message,len(str(p)))
     φ = totient(p) - 1

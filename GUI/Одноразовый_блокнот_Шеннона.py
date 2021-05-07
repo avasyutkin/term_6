@@ -67,6 +67,8 @@ def message_to_code(message):
 def code_to_message(bin_message):
     text = ''
     for i in bin_message:
+        if i < 0:
+            return 'Введенное сообщение не является шифртекстом.'
         text += chr(int(i))
 
     return text

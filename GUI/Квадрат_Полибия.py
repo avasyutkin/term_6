@@ -23,6 +23,8 @@ def decryption(encrypted_message):
     new_message = ''
     encrypted_message_array = encrypted_message.split()
     for symbol in encrypted_message_array:
+        if not symbol.isnumeric():
+            return 'Введенное сообщение не является шифртекстом.'
         for i in range(len(alphabet)):
             for j in range(len(alphabet[i])):
                 if str(i+1)+str(j+1) == symbol:

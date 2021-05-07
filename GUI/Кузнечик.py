@@ -1,5 +1,6 @@
 from textwrap import wrap
 from pyfinite import ffield
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
 
 π = [252, 238, 221, 17, 207, 110, 49, 22, 251, 196, 250, 218, 35, 197, 4, 77, 233, 119, 240, 219, 147, 46,
@@ -131,9 +132,7 @@ def encryption(a, K):
         return 'Введите ключ длиной 9 символов.', K
 
     K_ = K[:9]
-    print(K_)
     K = str_to_hex(K_)[:128]
-    print(K)
     K = F(K)
     a = message_completion(a)
     a_ = ''
@@ -152,6 +151,9 @@ def decryption(a, K):
     K_ = K[:9]
     K = str_to_hex(K_)[:128]
     K = F(K)
+    for i in a:
+        if i not in alphabet_dec:
+            return 'Введенное сообщение не является шифртекстом.', K_
     a = wrap(a, 32)
     a_=''
 
@@ -199,21 +201,3 @@ def hex_to_str(a):
             a_ += chr(int(a[i], 16))
 
     return a_
-
-"""
-message = input('Введите сообщение: ')
-
-key = input('Введите ключ (минимум 8 символов): ')
-if len(key) < 8:
-    print('Введите новый ключ.')
-    sys.exit(0)
-#message = 'невсекотумасленицазптбудетивеликийпосттчк'
-#key = 'совасовасова'
-
-enc = encryption(message, key)
-print('Зашифрованное сообщение:', enc)
-
-dec = decryption(enc, key)
-print('Расшифрованное сообщение:', dec)
-"""
-
