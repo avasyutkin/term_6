@@ -34,7 +34,7 @@ def key_generation(K):
     p = 0
     for i in range(len(K_)):
         K_[i] += K[p:p+8]
-        p+=8
+        p += 8
         if p == 64:
             p = 0
 
@@ -72,6 +72,7 @@ def decryption(a, K):
     for i in a:
         if i not in alphabet_dec:
             return 'Введенное сообщение не является шифртекстом.', K_
+
     a = wrap(a, 8)
     K = key_generation(K_)
     new_a = ''

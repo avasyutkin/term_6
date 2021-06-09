@@ -53,7 +53,6 @@ def decryption(encrypted_message):
         if k == 7:
             k = 0
 
-
     decrypted_message = wrap(decrypted_message, 2)   # делим строку по 2 символа
     message = ''
     for i in decrypted_message:

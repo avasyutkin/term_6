@@ -1,6 +1,7 @@
 import random
 from sympy.ntheory import totient
 
+
 def hash_(message, p):
     h = 0
     hash = 0
@@ -100,7 +101,7 @@ def generation_signature(message, xu_k):
 
     r = P[0] % q
     s = (k * hash + r * xu) % q
-    return 'Введенное сообщение подписано парой чисел: ' + str(r) + ' ' + str(s) + '\nПараметры эллиптической кривой: a = ' + str(a) + '  p = ' + str(p) + '  q = ' + str(q) + '  G = ' + str(G) + '\nОткрытый ключ: ' + str(yu)
+    return 'Введенное сообщение подписано парой чисел: ' + str(r) + ' ' + str(s) + '\nПараметры эллиптической кривой: a = ' + str(a) + '  p = ' + str(p) + '  q = ' + str(q) + '  G = ' + str(G) + '\nЗакрытый ключ: ' + str(yu)
 
 
 

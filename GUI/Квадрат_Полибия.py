@@ -10,24 +10,25 @@ alphabet = [['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', '
 
 
 def encryption(message):
-    new_message = ''
+    message_ = ''
     for symbol in message:
         for i in range(len(alphabet)):
             for j in range(len(alphabet[i])):
                 if alphabet[i][j] == symbol:
-                    new_message = new_message + str(i+1)+str(j+1) + ' '
-    return new_message
+                    message_ = message_ + str(i+1)+str(j+1) + ' '
+    return message_
 
 
-def decryption(encrypted_message):
-    new_message = ''
-    encrypted_message_array = encrypted_message.split()
-    for symbol in encrypted_message_array:
+def decryption(message):
+    message_ = ''
+    message_array = message.split()
+    for symbol in message_array:
         if not symbol.isnumeric():
             return 'Введенное сообщение не является шифртекстом.'
         for i in range(len(alphabet)):
             for j in range(len(alphabet[i])):
                 if str(i+1)+str(j+1) == symbol:
-                    new_message = new_message + str(alphabet[i][j])
-    return new_message
+                    message_ = message_ + str(alphabet[i][j])
+
+    return message_
 

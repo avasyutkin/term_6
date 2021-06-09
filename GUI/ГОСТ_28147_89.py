@@ -90,7 +90,6 @@ def encryption_decryption(message, K_S_, option):
         N1_2 = N1 + N2
 
         for j in range(len(Tо[i])):
-            print(Tо[i][j])
             if Tо[i][j] != '0' and Tо[i][j] != '1' and option == False:
                 return 'Введенное сообщение не является шифртекстом.', K_S_
             Tш += str((int(Tо[i][j], 2) ^ int(N1_2[j], 2)))  # 64-разрядный блок гаммы шифра суммируется поразрядно по модулю 2 с первым 64-разрядным блоком открытых данных
@@ -101,6 +100,6 @@ def encryption_decryption(message, K_S_, option):
     return Tш, K_S_
 
 
-K_S = ['','']
+K_S = ['', '']
 N5 = '00000001000000010000000100000001'
 N6 = '00000001000000010000000100000100'

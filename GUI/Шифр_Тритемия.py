@@ -13,10 +13,10 @@ def encryption(message):
     return encrypted_message
 
 
-def decryption(encrypted_message):
+def decryption(message):
     i = 1
     decrypted_message = ''
-    for symbol in encrypted_message:
+    for symbol in message:
         symbol = (alphabet.index(symbol) - i) % 140
         decrypted_message = decrypted_message + alphabet[symbol]
         if i == len(alphabet) - 1:

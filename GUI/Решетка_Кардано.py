@@ -41,7 +41,7 @@ def key_generation(len_message):  # генерация решетки
         if matrix[x, y] in nonrepeating_array:
             continue
         else:
-            key.append([x,y])
+            key.append([x, y])
             nonrepeating_array.append(matrix[x, y])
 
     return matrix, key

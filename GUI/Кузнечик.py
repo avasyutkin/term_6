@@ -1,7 +1,7 @@
 from textwrap import wrap
 from pyfinite import ffield
-alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
+alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
 π = [252, 238, 221, 17, 207, 110, 49, 22, 251, 196, 250, 218, 35, 197, 4, 77, 233, 119, 240, 219, 147, 46,
      153, 186, 23, 54, 241, 187, 20, 205, 95, 193, 249, 24, 101, 90, 226, 92, 239, 33, 129, 28, 60, 66, 139, 1, 142,
@@ -105,6 +105,7 @@ def inv_L(a):
 
 
 def X(k, a):
+
     return '0' * (32 - len(hex(int(a, 16) ^ int(k, 16))[2:])) + hex(int(a, 16) ^ int(k, 16))[2:]
 
 
@@ -127,6 +128,7 @@ def F(K):
 
     return K
 
+
 def encryption(a, K):
     if len(K) < 9:
         return 'Введите ключ длиной 9 символов.', K
@@ -143,6 +145,7 @@ def encryption(a, K):
         a_ += a[p]
 
     return a_, K_
+
 
 def decryption(a, K):
     if len(K) < 9:
@@ -164,7 +167,9 @@ def decryption(a, K):
         a[p] = X(K[0], a[p])
         a_ += a[p]
     a_ = hex_to_str(a_)
+
     return a_, K_
+
 
 def array_to_str(array):
     str = ''

@@ -374,6 +374,7 @@ def decryption(input, key):
 
         input_new += array_to_str(input[l:l + 4])
     input_new = hex_to_str(input_new)
+
     return input_new, key
 
 

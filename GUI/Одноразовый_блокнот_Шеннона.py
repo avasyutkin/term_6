@@ -1,5 +1,3 @@
-
-
 def prn_generator(parameters, len_message):
     parameters = list(parameters.split())
     if len(parameters) < 3:
@@ -11,7 +9,7 @@ def prn_generator(parameters, len_message):
 
     T_array = []
     if c % 2 == 0:
-        return 'Значение параметра с должно быть четным. Пожалуйста, введите новые параметры.'
+        return 'Значение параметра с не должно быть четным. Пожалуйста, введите новые параметры.'
 
     if a % 4 != 1:
         return 'Значение параметра а должно удовлетворять условию a mod 4 = 1. Пожалуйста, введите новые параметры.'

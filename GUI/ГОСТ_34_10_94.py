@@ -39,7 +39,6 @@ def get_a(q, p):  # генерация а
 
 def generation_signature(message, p):
     p = p.split()[0]
-    print(p)
 
     if not p.isnumeric():
         return 'Значение параметра p должно быть целым числом.'
@@ -60,7 +59,7 @@ def generation_signature(message, p):
     if h % q == 0:
         h = 1
 
-    k = random.randint(2, q) # генерация k
+    k = random.randint(2, q)  # генерация k
     r = a ** k % p % q
     s = (x * r + k * h) % q
     while r == 0:
@@ -104,7 +103,6 @@ def signature_verification(message, r_s_p_q_a_y):
         return 'Подпись верна.'
     else:
         return 'Подпись не верна. u и r: ' + str(u) + ' ' + str(r)
-
 
 
 def message_to_pos_unicode(message):

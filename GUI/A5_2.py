@@ -10,6 +10,7 @@ def key_generation(key):
 
     return key_bin
 
+
 def message_to_bin(message):
     message_arr = []
     for i in message:
@@ -18,12 +19,14 @@ def message_to_bin(message):
 
     return message_binary
 
+
 def bin_array_to_str(bin_message):
     message = ''
     for i in bin_message:
         message += i
 
     return message
+
 
 def bin_to_hex(message, key):
     if len(key) < 6:
@@ -39,12 +42,14 @@ def bin_to_hex(message, key):
 
     return message_hex, key
 
+
 def hex_to_bin(message_hex):
     message = ''
     for i in message_hex:
         message += '0' * (4 - len(bin(int(i, 16))[2:])) + bin(int(i, 16))[2:]
 
     return message
+
 
 def bin_to_message(bin_message, key):
     if len(key) < 6:

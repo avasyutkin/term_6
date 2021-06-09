@@ -14,10 +14,10 @@ def encryption(message, key):
     return encrypted_message
 
 
-def decryption(encrypted_message, key):
-    encrypted_message = message_to_code(encrypted_message)
+def decryption(message, key):
+    message = message_to_code(message)
     decrypted_message = ''
-    for symbol in encrypted_message:
+    for symbol in message:
         if symbol == 0:
             symbol = str('0' * (4 - len(str((int(symbol) - key) % 1114 + 1))) + str((int(symbol) + key) % 1114 + 1))
         else:
@@ -35,10 +35,10 @@ def message_to_code(message):
     return message_arr
 
 
-def code_to_message(bin_message):
-    bin_message = wrap(bin_message, 4)
+def code_to_message(message):
+    message = wrap(message, 4)
     text = ''
-    for i in bin_message:
+    for i in message:
         text += chr(int(i))
 
     return text

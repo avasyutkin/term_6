@@ -78,6 +78,7 @@ def encryption(message, Cb):
         private_key = key_gen(P, k, a, p)
         P = key_gen(public_key, k, a, p)
 
+
         new_message += str(private_key[0]) + ' ' + str(private_key[1]) + ' ' + str(int(message[i]) * P[0] % p) + ' '
 
     return new_message
@@ -137,18 +138,6 @@ def pos_unicode_to_message(message):
     return new_message
 
 
-
 a = 1282
 b = 26572
 p = 65537
-
-"""
-message = input('Введите сообщение: ')
-key = int(input('Введите закрытый ключ (число не больше 65537):  '))
-
-enc = encryption(message, key)
-print('Зашифрованное сообщение:', enc)
-
-dec = decryption(enc, key)
-print('Расшифрованное сообщение:', dec)
-"""

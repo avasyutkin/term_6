@@ -2,6 +2,7 @@ from textwrap import wrap
 
 alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '.', ',', '-', '!', '?', ':', ';', '—', '/', ' ', '(', ')', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
+
 def before_processing(message, key):  # предобработка
     message = list(message)
     new_message = ''
@@ -20,6 +21,7 @@ def before_processing(message, key):  # предобработка
     new_message = letter_to_index(new_message, key)
 
     return new_message
+
 
 def letter_to_index(message, key):
     key = key_generation(key)
@@ -61,7 +63,6 @@ def encryption(message, key):
         elif i[1] == i[3]:  # если две буквы биграммы в одном столбце, перемещаем их вниз на одну позицию
             i[0] = (int(i[0]) + 1) % 5
             i[2] = (int(i[2]) + 1) % 5
-
         else:  # если буквы в одной биграмме расположены в разных строках и столбцах
             _i = i[3]
             i[3] = i[1]
@@ -73,6 +74,7 @@ def encryption(message, key):
 
 
     return encrypted_message
+
 
 def decryption(encrypted_message, key):
     decrypted_message = ''
@@ -106,6 +108,7 @@ def key_generation(key):
         for j in range(6):
             key_matrix[i][j] = key[k]
             k = k + 1
+
     return key_matrix
 
 

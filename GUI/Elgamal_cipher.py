@@ -1,7 +1,6 @@
 import math
 import random
 from textwrap import wrap
-import sys
 from sympy.ntheory import totient
 alphabet_dec = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
@@ -67,9 +66,9 @@ def decryption(message, x_p):
         return 'Введите два параметра X и P.'
 
     if not x_p[0].isnumeric():
-        return 'Значение параметра Y должно быть целым числом.'
+        return 'Значение параметра X должно быть целым числом.'
     if not x_p[1].isnumeric():
-        return 'Значение параметра G должно быть целым числом.'
+        return 'Значение параметра P должно быть целым числом.'
 
     x, p = int(x_p[0]), int(x_p[1])
 
@@ -111,19 +110,3 @@ def pos_unicode_to_message(message):
 def is_prime(a):  # проверка простоты числа
 
     return all(a % i for i in range(2, a))
-
-"""
-message = input('Введите сообщение: ')
-print('Введите числа p — простое и большее', int(max(message_to_pos_unicode(message))), 'и g, x, меньшие p, через пробел: ')
-p_g_x = list(map(int, input().split()))
-
-if p_g_x[0] < int(max(message_to_pos_unicode(message))) or not is_prime(p_g_x[0]) or p_g_x[1] > p_g_x[0] or p_g_x[2] > p_g_x[0]:
-    print('Введите корректные параметры.')
-    sys.exit(0)
-
-enc = encryption(message, p_g_x[1], p_g_x[2], p_g_x[0])
-print(enc)
-
-dec = decryption(enc,  p_g_x[2], p_g_x[0])
-print(dec)
-"""

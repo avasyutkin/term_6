@@ -18,8 +18,11 @@ def message_to_vector_enc(message_vector, message, key):  # заполняем �
             else:
                 message_vector[j][i] = ' '  # если в векторе осталось место, а буквы в сообщении закончились, заполняем пробелами
             k = k + 1
+
     message_vector = np.array(message_vector)
+
     return message_vector
+
 
 def message_to_vector_dec(message_vector, message, key):  # заполняем векторы буквами зашифрованного сообщения
     k = 0
@@ -67,6 +70,7 @@ def decryption(encryption_message, key):
             message_decryption_str = message_decryption_str + j
 
     return message_decryption_str
+
 
 def array_in_str(message_arr):  #  преобразовываем массив в строку, чтобы сообщение на выходе имело презентабельный вид
     message = ''

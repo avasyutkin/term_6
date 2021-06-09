@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
-import kivy
 from kivy.app import App
-from  kivy.uix.togglebutton import ToggleButton
+from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
-from kivy.uix.checkbox import CheckBox
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
@@ -135,10 +133,9 @@ class Interface(App):
         self.form.add_widget(self.output_message)
         self.form.add_widget(self.scroll_cipher_array)
 
-        def encryption(instance):
-            str = ''
+        def show_enc(instance):
             if АТБАШ_var.state == 'down':
-                self.output_message.text = АТБАШ.encryption(self.input_message.text, str)
+                self.output_message.text = АТБАШ.enc_dec(self.input_message.text)
             if Квадрат_Полибия_var.state == 'down':
                 self.output_message.text = Квадрат_Полибия.encryption(self.input_message.text)
             if Шифр_Цезаря_var.state == 'down':
@@ -276,10 +273,9 @@ class Interface(App):
                     self.output_message.text = DiffieHellman.key_exchange(self.input_key.text)
 
 
-        def decryption(instance):
-            str = ''
+        def show_dec(instance):
             if АТБАШ_var.state == 'down':
-                self.output_message.text = АТБАШ.decryption(self.input_message.text, str)
+                self.output_message.text = АТБАШ.enc_dec(self.input_message.text)
             if Квадрат_Полибия_var.state == 'down':
                 self.output_message.text = Квадрат_Полибия.decryption(self.input_message.text)
             if Шифр_Цезаря_var.state == 'down':
@@ -446,7 +442,7 @@ class Interface(App):
             choice_cipher(instance)
 
         def choice_Вертикальная_перестановка(instance):
-            self.input_key.hint_text = 'Введите любую последовательность символов'
+            self.input_key.hint_text = 'Введите любую последовательность нулей и единиц'
             choice_cipher(instance)
 
         def choice_Решетка_Кардано(instance):
@@ -459,6 +455,10 @@ class Interface(App):
 
         def choice_ГОСТ_28147_89(instance):
             self.input_key.hint_text = 'Введите последовательность символов длиной 20'
+            choice_cipher(instance)
+
+        def choice_Плейфер(instance):
+            self.input_key.hint_text = 'Введите любую последовательность символов'
             choice_cipher(instance)
 
         def choice_A5_1(instance):
@@ -514,6 +514,7 @@ class Interface(App):
             choice_cipher(instance)
 
             self.button_encryption.text = 'Обменяться ключами'
+            self.button_decryption.disabled = True
 
 
         def choice_cipher(instance):
@@ -525,6 +526,8 @@ class Interface(App):
 
             self.label_output.text = 'Результат преобразования'
             self.label_output.pos = (40, 125)
+            self.button_decryption.disabled = False
+
 
         def choice_DS(instance):
             self.button_encryption.text = 'Генерация'
@@ -535,6 +538,8 @@ class Interface(App):
 
             self.label_output.text = 'Значение подписи или результат проверки'
             self.label_output.pos = (88, 125)
+            self.button_decryption.disabled = False
+
 
 
         АТБАШ_var.bind(on_press=choice_АТБАШ)
@@ -546,6 +551,7 @@ class Interface(App):
         S_block_var.bind(on_press=choice_S_block)
         Матричный_шифр_var.bind(on_press=choice_Матричный_шифр)
         Перестановка_var.bind(on_press=choice_Вертикальная_перестановка)
+        Шифр_Плэйфера_var.bind(on_press=choice_Плейфер)
         Решетка_Кардано_var.bind(on_press=choice_Решетка_Кардано)
         Блокнот_Шеннона_var.bind(on_press=choice_Блокнот_Шеннона)
         ГОСТ_28147_89_var.bind(on_press=choice_ГОСТ_28147_89)
@@ -563,8 +569,8 @@ class Interface(App):
         ECC_var.bind(on_press=choice_ECC)
         DiffieHellman_var.bind(on_press=choice_DiffieHellman)
 
-        self.button_encryption.bind(on_press=encryption)
-        self.button_decryption.bind(on_press=decryption)
+        self.button_encryption.bind(on_press=show_enc)
+        self.button_decryption.bind(on_press=show_dec)
         self.layout_array_cipher.bind(minimum_width=self.layout_array_cipher.setter('width'))
 
 

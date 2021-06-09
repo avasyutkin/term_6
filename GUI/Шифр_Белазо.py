@@ -13,11 +13,11 @@ def encryption(message, key):
             i = i + 1
     return encrypted_message
 
-def decryption(encrypted_message, key):
+def decryption(message, key):
     decrypted_message = ''
     i = 0
     key_array = list(key)
-    for symbol in encrypted_message:
+    for symbol in message:
         symbol = (alphabet.index(symbol) - alphabet.index(key_array[i])) % 140
         decrypted_message = decrypted_message + alphabet[symbol]
         if i == len(key_array) - 1:
@@ -32,8 +32,14 @@ def validate(message, key, bool):
         if i not in alphabet:
             key = key.replace(i, "")
 
+    for i in message:
+        if i not in alphabet:
+            message = message.replace(i, "")
+
     if key == '':
-        return 'Символы не поддерживаются кодировкой. Введите другой ключ.', key
+        return 'Символы в ключе не поддерживаются кодировкой. Введите другой ключ.', key
+    elif key == '':
+        return 'Символы в сообщении не поддерживаются кодировкой.', key
     else:
         if bool == True:
             return encryption(message, key), str(key)
